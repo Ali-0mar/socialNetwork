@@ -8,7 +8,13 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
 import {fileURLToPath} from 'url';
-
+import {signUp} from "./controllers/Auth.js";
+import {createPost} from "./controllers/Posts.js";
+import authRoutes from './routes/Auth.js'
+import userRoutes from './routes/Users.js'
+import postsRoutes from './routes/Posts.js'
+import errorHandler from "./errors/errorHandler.js";
+import {verifyToken} from "./middlewares/authorization.js";
 /* Configuration */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,6 +48,24 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({storage});
+/*------------------------------Start Routes {------------------------------*/
+/* Start Routes With Files { */
+app.post('/auth/signUp', upload.single('picture'), signUp);
+app.post('/posts', verifyToken, upload.single('picture'), createPost)
+
+/* } End Routes With Files */
+
+/* Start Authentication Routes{ */
+app.use('/auth', authRoutes);
+app.use("/users", userRoutes);
+app.use("/posts", postsRoutes)
+/* } End Authentication Routes */
+
+/*---------------} End Routes---------------*/
+
+/*--------------- Start Error Handling {-----------------*/
+app.use(errorHandler);
+/*--------------- } EndError Handling-----------------*/
 
 /* Mongoose Database Configurations*/
 const PORT = process.env.PORT || 8000;
