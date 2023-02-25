@@ -15,6 +15,10 @@ import userRoutes from './routes/Users.js'
 import postsRoutes from './routes/Posts.js'
 import errorHandler from "./errors/errorHandler.js";
 import {verifyToken} from "./middlewares/authorization.js";
+import Post from "./models/Post.js";
+import User from "./models/User.js";
+import {posts, users} from "./data/index.js"
+import user from "./models/User.js";
 /* Configuration */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -75,6 +79,8 @@ try{
         useNewUrlParser: true,
         useUnifiedTopology: true
     });
+    await Post.insertMany(posts);
+    await User.insertMany(users)
     await app.listen(PORT);
     console.log(`Server Running on port ${PORT}`);
 } catch (e) {
