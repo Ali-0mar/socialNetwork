@@ -54,7 +54,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 /*------------------------------Start Routes {------------------------------*/
 /* Start Routes With Files { */
-app.post('/auth/signUp', upload.single('picture'), signUp);
+app.post('/auth/register', upload.single('picture'), signUp);
 app.post('/posts', verifyToken, upload.single('picture'), createPost)
 
 /* } End Routes With Files */
@@ -79,8 +79,8 @@ try{
         useNewUrlParser: true,
         useUnifiedTopology: true
     });
-    await Post.insertMany(posts);
-    await User.insertMany(users)
+    // await Post.insertMany(posts);
+    // await User.insertMany(users)
     await app.listen(PORT);
     console.log(`Server Running on port ${PORT}`);
 } catch (e) {
